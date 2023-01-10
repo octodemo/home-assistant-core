@@ -125,7 +125,7 @@ class ZwaveLight(ZWaveBaseEntity, LightEntity):
             CommandClass.SWITCH_COLOR,
             value_property_key=ColorComponent.COLD_WHITE,
         )
-        self._supported_color_modes = set()
+        self._supported_color_modes: set[ColorMode] = set()
 
         # get additional (optional) values and set features
         self._target_brightness = self.get_zwave_value(
@@ -177,7 +177,7 @@ class ZwaveLight(ZWaveBaseEntity, LightEntity):
         """
         if self.info.primary_value.value is None:
             return None
-        return round((self.info.primary_value.value / 99) * 255)
+        return round((cast(int, self.info.primary_value.value) / 99) * 255)
 
     @property
     def color_mode(self) -> str | None:
@@ -218,7 +218,7 @@ class ZwaveLight(ZWaveBaseEntity, LightEntity):
         return self._max_mireds
 
     @property
-    def supported_color_modes(self) -> set | None:
+    def supported_color_modes(self) -> set[ColorMode] | None:
         """Flag supported features."""
         return self._supported_color_modes
 
